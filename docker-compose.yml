@@ -6,7 +6,7 @@ services:
       context: ./server
       dockerfile: Dockerfile
     env_file:
-      - ./server/.env
+      - ./server/.env.development
     ports:
       - "8761:3000"
     depends_on:
@@ -16,14 +16,14 @@ services:
       - ./server:/app
       - /app/node_modules
     networks:
-      - invoice_demo_network
+      - superheros_app_network
 
   client:
     build:
       context: ./client
       dockerfile: Dockerfile
     env_file:
-      - ./client/.env
+      - ./client/.env.development
     ports:
       - "8762:5173"
     depends_on:
@@ -32,16 +32,16 @@ services:
       - ./client:/app
       - /app/node_modules
     networks:
-      - invoice_demo_network
+      - superheros_app_network
 
   postgres:
     image: postgres:16
-    container_name: postgres_db
+    container_name: postgres_superheros
     restart: always
     environment:
       POSTGRES_USER: postgres_dbu
-      POSTGRES_PASSWORD: invoice_db_pass
-      POSTGRES_DB: invoice_dbn
+      POSTGRES_PASSWORD: superheros_db_pass
+      POSTGRES_DB: superheros_dbn
     ports:
       - "8763:5432"
     volumes:
@@ -51,11 +51,11 @@ services:
       interval: 10s
       retries: 5
     networks:
-      - invoice_demo_network
+      - superheros_app_network
 
 volumes:
   pgdata:
 
 networks:
-  invoice_demo_network:
+  superheros_app_network:
     driver: bridge
